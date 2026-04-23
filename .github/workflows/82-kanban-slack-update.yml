@@ -360,28 +360,60 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests slack_sdk
 
-          TEAM_TO_CHANNEL_JSON="$(python - <<'PY'
-          import json, os
-          import slack_bot_lookup_channels
+          python - <<'PY'
+          import os
+          import json
+          from slack_sdk import WebClient
+          from slack_sdk.errors import SlackApiError
 
+          def lookupChannels(prefix, token):
+            """
+            Creates a new public Slack channel with the given name.
+
+            Parameters:
+            - channelName (str): The name of the new public channel to be created.
+            - token (str): The OAuth token for the Slack API.
+            Returns:
+            - dict: A dictionary mapping channel names to their corresponding channel IDs.
+            """
+
+            client = WebClient(token=token)
+            channels = {}
+            try:
+              # Call the conversations.list method using the WebClient
+              result = client.conversations_list(types="public_channel")
+              for channel in result["channels"]:
+                name = channel["name"]
+                if name.startswith(prefix):
+                  channels[name] = channel["id"]
+            except SlackApiError as e:
+              print(f"Error fetching channels: {e.response['error']}")
+            return channels
+
+          def get_team_to_channel_id(prefix, token):
+            channels = lookupChannels(prefix, token)
+            print(f"Channels found with prefix '{prefix}': {channels}")
+            return channels
+          
           qxx = os.getenv("qxx")
           token = os.environ.get("SLACK_BOT_USER_OAUTH_ACCESS_TOKEN")
           if not token:
               raise EnvironmentError("SLACK_BOT_USER_OAUTH_ACCESS_TOKEN is not set.")
 
-          d = slack_bot_lookup_channels.get_team_to_channel_id(qxx, token)
-          print(json.dumps(d, separators=(",", ":")))
+          print(f"Looking up channels with prefix '{qxx}' using provided token of length {len(token)}")    
+          d = get_team_to_channel_id(qxx, token)
+          json.dump(
+            d,
+            open("team_to_channel.json", "w"),
+            separators=(",", ":")
+          )
           PY
-          )"
+       
 
-          # (A) Make it an env var for the REST OF THIS JOB'S STEPS
-          {
-            echo "TEAM_TO_CHANNEL<<EOF"
-            echo "$TEAM_TO_CHANNEL_JSON"
-            echo "EOF"
-          } >> "$GITHUB_ENV"
+          TEAM_TO_CHANNEL_JSON=$(cat team_to_channel.json)
+          echo "Computed TEAM_TO_CHANNEL JSON: $TEAM_TO_CHANNEL_JSON"
+          cat team_to_channel.json
 
-          # (B) Make it a STEP OUTPUT (which we also promote to a JOB output above)
           {
             echo "TEAM_TO_CHANNEL<<EOF"
             echo "$TEAM_TO_CHANNEL_JSON"
