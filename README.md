@@ -15,7 +15,7 @@ TODO: Fill in this table with correct information.
 |---------------------------|--------------|-----------|
 | UCSBDiningCommonsMenuItem |              |           |
 | UCSBOrganization          |              |           |
-| RecommendationRequest     |              |           |
+| RecommendationRequest     |  Dongyi Xia  | dongyi-xia|
 | MenuItemReview            | Aiden Hunter |aidenhunter66|
 | HelpRequest               |              |           |
 | Articles                  |              |           |
