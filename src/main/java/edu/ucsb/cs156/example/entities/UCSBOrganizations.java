@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Entity(name = "ucsborganizatios")
+@Entity(name = "ucsborganizations")
 public class UCSBOrganizations {
   @Id private String orgCode;
   private String orgTranslationShort;
