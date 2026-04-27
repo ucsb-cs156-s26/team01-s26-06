@@ -1,6 +1,7 @@
 package edu.ucsb.cs156.example.controllers;
 
 import edu.ucsb.cs156.example.entities.UCSBOrganizations;
+import edu.ucsb.cs156.example.errors.EntityNotFoundException;
 import edu.ucsb.cs156.example.repositories.UCSBOrganizationsRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -47,5 +48,17 @@ public class UCSBOrganizationController extends ApiController {
     UCSBOrganizations savedOrganizations = ucsbOrganizationsRepository.save(organizations);
 
     return savedOrganizations;
+  }
+
+  @Operation(summary = "Get a single organization")
+  @PreAuthorize("hasRole('ROLE_USER')")
+  @GetMapping("")
+  public UCSBOrganizations getById(@Parameter(name = "orgCode") @RequestParam String orgCode) {
+    UCSBOrganizations organizations =
+        ucsbOrganizationsRepository
+            .findById(orgCode)
+            .orElseThrow(() -> new EntityNotFoundException(UCSBOrganizations.class, orgCode));
+
+    return organizations;
   }
 }
