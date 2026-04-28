@@ -12,7 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 /** This is a REST controller for UCSBDiningCommonsMenuItem */
-@Tag(name = "UCSBDiningCommonsMenuItemController")
+@Tag(name = "UCSBDiningCommonsMenuItem")
 @RequestMapping("/api/ucsbdiningcommonsmenuitem")
 @RestController
 @Slf4j
@@ -20,11 +20,11 @@ public class UCSBDiningCommonsMenuItemController extends ApiController {
   @Autowired UCSBDiningCommonsMenuItemRepository ucsbDiningCommonsMenuItemRepository;
 
   /**
-   * List all UCSB Dining common Menu Items
+   * List all UCSB Dining Commons menu items
    *
-   * @return an iterable of UCSBDate
+   * @return an iterable of UCSBDiningCommonsMenuItem
    */
-  @Operation(summary = "List all ucsb dining commons menu items")
+  @Operation(summary = "List all UCSB Dining Commons menu items")
   @PreAuthorize("hasRole('ROLE_USER')")
   @GetMapping("/all")
   public Iterable<UCSBDiningCommonsMenuItem> allUCSBDiningCommonsMenuItems() {
@@ -35,19 +35,31 @@ public class UCSBDiningCommonsMenuItemController extends ApiController {
   /**
    * Create a new menu item
    *
-   * @param diningCommonsCode the code of the dining commons
+   * @param diningCommonsCode the code of the dining commons (e.g. "ortega", "dlg")
    * @param name the name of the menu item
-   * @param station the station of the menu item (e.g. "Entrees" "Desserts")
+   * @param station the station where the item is served (e.g. "Entrees", "Desserts")
    * @return the saved menu item
    */
   @Operation(summary = "Create a new menu item")
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   @PostMapping("/post")
   public UCSBDiningCommonsMenuItem postUCSBDiningCommonsMenuItem(
-      @Parameter(name = "diningCommonsCode") @RequestParam String diningCommonsCode,
-      @Parameter(name = "name") @RequestParam String name,
-      @Parameter(name = "station") @RequestParam String station)
+      @Parameter(
+              name = "diningCommonsCode",
+              description = "Code of the dining commons (e.g. ortega, dlg)")
+          @RequestParam
+          String diningCommonsCode,
+      @Parameter(name = "name", description = "Name of the menu item (e.g. 'chicken')")
+          @RequestParam
+          String name,
+      @Parameter(
+              name = "station",
+              description = "Station where the item is served (e.g. Entrees, Desserts)")
+          @RequestParam
+          String station)
       throws JsonProcessingException {
+    // if any of the parameters are empty or null, ??
+
     UCSBDiningCommonsMenuItem menuItem =
         UCSBDiningCommonsMenuItem.builder()
             .diningCommonsCode(diningCommonsCode)
