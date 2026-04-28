@@ -10,9 +10,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import edu.ucsb.cs156.example.ControllerTestCase;
-// import edu.ucsb.cs156.example.entities.UCSBDate;
 import edu.ucsb.cs156.example.entities.Articles;
-// import edu.ucsb.cs156.example.repositories.UCSBDateRepository;
 import edu.ucsb.cs156.example.repositories.ArticlesRepository;
 import edu.ucsb.cs156.example.repositories.UserRepository;
 import edu.ucsb.cs156.example.testconfig.TestConfig;
@@ -26,12 +24,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MvcResult;
-// test 7,8
-
-// //import object mapper from icon.fasterxml.jackson.databind
-// import com.fasterxml.jackson.databind.ObjectMapper;
-// //import autowired from springframework.beans.factory.annotation.Autowired
-// import org.springframework.beans.factory.annotation.Autowired;
 
 @WebMvcTest(controllers = ArticlesController.class)
 @Import(TestConfig.class)
