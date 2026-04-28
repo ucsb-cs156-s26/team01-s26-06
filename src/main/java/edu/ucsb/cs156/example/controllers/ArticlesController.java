@@ -6,6 +6,7 @@ import edu.ucsb.cs156.example.repositories.ArticlesRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,5 +80,24 @@ public class ArticlesController extends ApiController {
     Articles savedArticle = articlesRepository.save(article);
 
     return savedArticle;
+  }
+
+  /**
+   * Get a single date by id
+   *
+   * @param id the id of the article
+   * @return a Article
+   */
+  @Operation(summary = "Get a single article")
+  @PreAuthorize("hasRole('ROLE_USER')")
+  @GetMapping("")
+  public Articles getById(@Parameter(name = "id") @RequestParam Long id) {
+    Articles article =
+        articlesRepository
+            .findById(id)
+            .orElseThrow(
+                () -> new EntityNotFoundException("Articles with id " + id + " not found"));
+
+    return article;
   }
 }
