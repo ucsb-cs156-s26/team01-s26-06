@@ -2,11 +2,12 @@ package edu.ucsb.cs156.example.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import edu.ucsb.cs156.example.entities.Articles;
+import edu.ucsb.cs156.example.errors.EntityNotFoundException;
 import edu.ucsb.cs156.example.repositories.ArticlesRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.persistence.EntityNotFoundException;
+// import jakarta.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,7 +97,8 @@ public class ArticlesController extends ApiController {
         articlesRepository
             .findById(id)
             .orElseThrow(
-                () -> new EntityNotFoundException("Articles with id " + id + " not found"));
+                //  () -> new EntityNotFoundException("Articles with id " + id + " not found"));
+                () -> new EntityNotFoundException(Articles.class, id));
 
     return article;
   }
