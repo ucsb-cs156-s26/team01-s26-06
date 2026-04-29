@@ -83,7 +83,6 @@ public class ArticlesController extends ApiController {
     article.setEmail(email);
     article.setExplanation(explanation);
     article.setDateAdded(dateAdded);
-    article.setExplanation(explanation);
 
     Article savedArticle = articleRepository.save(article);
 
