@@ -19,13 +19,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Entity(name = "articles")
-public class Articles {
+public class Article {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
 
   private String title;
   private String url;
+  private String explanation;
   private String email; // of person that submitted it
   private LocalDateTime dateAdded;
 }

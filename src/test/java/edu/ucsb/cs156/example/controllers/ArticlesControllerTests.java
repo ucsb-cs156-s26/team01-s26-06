@@ -10,8 +10,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import edu.ucsb.cs156.example.ControllerTestCase;
-import edu.ucsb.cs156.example.entities.Articles;
-import edu.ucsb.cs156.example.repositories.ArticlesRepository;
+import edu.ucsb.cs156.example.entities.Article;
+import edu.ucsb.cs156.example.repositories.ArticleRepository;
 import edu.ucsb.cs156.example.repositories.UserRepository;
 import edu.ucsb.cs156.example.testconfig.TestConfig;
 import java.time.LocalDateTime;
@@ -30,7 +30,7 @@ import org.springframework.test.web.servlet.MvcResult;
 @Import(TestConfig.class)
 public class ArticlesControllerTests extends ControllerTestCase {
 
-  @MockitoBean ArticlesRepository articlesRepository;
+  @MockitoBean ArticleRepository articleRepository;
 
   @MockitoBean UserRepository userRepository;
 
@@ -54,6 +54,7 @@ public class ArticlesControllerTests extends ControllerTestCase {
             post("/api/articles/post")
                 .param("title", "Golden Retriever Overview")
                 .param("url", "https://moderndogmagazine.com/articles/breeds/the-golden-retriever/")
+                .param("explanation", "A brief overview of the Golden Retriever breed.")
                 .param("email", "prishabobde@ucsb.edu")
                 .param("dateAdded", "2022-01-03T00:00:00")
                 .with(csrf()))
@@ -68,6 +69,7 @@ public class ArticlesControllerTests extends ControllerTestCase {
             post("/api/articles/post")
                 .param("title", "Golden Retriever Overview")
                 .param("url", "https://moderndogmagazine.com/articles/breeds/the-golden-retriever/")
+                .param("explanation", "A brief overview of the Golden Retriever breed.")
                 .param("email", "prishabobde@ucsb.edu")
                 .param("dateAdded", "2022-01-03T00:00:00")
                 .with(csrf()))
@@ -81,18 +83,19 @@ public class ArticlesControllerTests extends ControllerTestCase {
     // arrange
     LocalDateTime ldt1 = LocalDateTime.parse("2022-01-03T00:00:00");
 
-    Articles article1 =
-        Articles.builder()
+    Article article1 =
+        Article.builder()
             .url("https://moderndogmagazine.com/articles/breeds/the-golden-retriever/")
             .title("Golden Retriever Overview")
+            .explanation("A brief overview of the Golden Retriever breed.")
             .email("prishabobde@ucsb.edu")
             .dateAdded(ldt1)
             .build();
 
-    ArrayList<Articles> expectedArticles = new ArrayList<>();
+    ArrayList<Article> expectedArticles = new ArrayList<>();
     expectedArticles.add(article1);
 
-    when(articlesRepository.findAll()).thenReturn(expectedArticles);
+    when(articleRepository.findAll()).thenReturn(expectedArticles);
 
     // act
     MvcResult response =
@@ -100,7 +103,7 @@ public class ArticlesControllerTests extends ControllerTestCase {
 
     // assert
 
-    verify(articlesRepository, times(1)).findAll();
+    verify(articleRepository, times(1)).findAll();
     String expectedJson = mapper.writeValueAsString(expectedArticles);
     String responseString = response.getResponse().getContentAsString();
     assertEquals(expectedJson, responseString);
@@ -113,15 +116,16 @@ public class ArticlesControllerTests extends ControllerTestCase {
 
     LocalDateTime ldt1 = LocalDateTime.parse("2022-01-03T00:00:00");
 
-    Articles article1 =
-        Articles.builder()
+    Article article1 =
+        Article.builder()
             .url("https://moderndogmagazine.com/articles/breeds/the-golden-retriever/")
             .title("Golden Retriever Overview")
+            .explanation("A brief overview of the Golden Retriever breed.")
             .email("prishabobde@ucsb.edu")
             .dateAdded(ldt1)
             .build();
 
-    when(articlesRepository.save(eq(article1))).thenReturn(article1);
+    when(articleRepository.save(eq(article1))).thenReturn(article1);
 
     // act
     MvcResult response =
@@ -133,13 +137,14 @@ public class ArticlesControllerTests extends ControllerTestCase {
                         "url",
                         "https://moderndogmagazine.com/articles/breeds/the-golden-retriever/")
                     .param("email", "prishabobde@ucsb.edu")
+                    .param("explanation", "A brief overview of the Golden Retriever breed.")
                     .param("dateAdded", "2022-01-03T00:00:00")
                     .with(csrf()))
             .andExpect(status().isOk())
             .andReturn();
 
     // assert
-    verify(articlesRepository, times(1)).save(eq(article1));
+    verify(articleRepository, times(1)).save(eq(article1));
     String expectedJson = mapper.writeValueAsString(article1);
     String responseString = response.getResponse().getContentAsString();
     assertEquals(expectedJson, responseString);
@@ -158,7 +163,7 @@ public class ArticlesControllerTests extends ControllerTestCase {
 
     // arrange
 
-    when(articlesRepository.findById(eq(7L))).thenReturn(Optional.empty());
+    when(articleRepository.findById(eq(7L))).thenReturn(Optional.empty());
 
     // act
     MvcResult response =
@@ -169,10 +174,10 @@ public class ArticlesControllerTests extends ControllerTestCase {
 
     // assert
 
-    verify(articlesRepository, times(1)).findById(eq(7L));
+    verify(articleRepository, times(1)).findById(eq(7L));
     Map<String, Object> json = responseToJson(response);
     assertEquals("EntityNotFoundException", json.get("type"));
-    assertEquals("Articles with id 7 not found", json.get("message"));
+    assertEquals("Article with id 7 not found", json.get("message"));
   }
 
   @WithMockUser(roles = {"USER"})
@@ -181,16 +186,17 @@ public class ArticlesControllerTests extends ControllerTestCase {
 
     // arrange
 
-    Articles article1 =
-        Articles.builder()
+    Article article1 =
+        Article.builder()
             .id(7L)
             .url("https://moderndogmagazine.com/articles/breeds/the-golden-retriever/")
             .title("Golden Retriever Overview")
             .email("prishabobde@ucsb.edu")
+            .explanation("A brief overview of the Golden Retriever breed.")
             .dateAdded(LocalDateTime.parse("2022-01-03T00:00:00"))
             .build();
 
-    when(articlesRepository.findById(eq(7L))).thenReturn(Optional.of(article1));
+    when(articleRepository.findById(eq(7L))).thenReturn(Optional.of(article1));
 
     // act
     MvcResult response =
@@ -201,7 +207,7 @@ public class ArticlesControllerTests extends ControllerTestCase {
 
     // assert
 
-    verify(articlesRepository, times(1)).findById(eq(7L));
+    verify(articleRepository, times(1)).findById(eq(7L));
     String expectedJson = mapper.writeValueAsString(article1);
     String responseString = response.getResponse().getContentAsString();
     assertEquals(expectedJson, responseString);
@@ -215,25 +221,26 @@ public class ArticlesControllerTests extends ControllerTestCase {
     LocalDateTime ldt1 = LocalDateTime.parse("2022-01-04T00:00:00");
     LocalDateTime ldt2 = LocalDateTime.parse("2023-01-04T00:00:00");
 
-    Articles article1 =
-        Articles.builder()
+    Article article1 =
+        Article.builder()
             .url("https://moderndogmagazine.com/articles/breeds/the-golden-retriever/")
             .title("Golden Retriever Overview")
             .email("prishabobde@ucsb.edu")
             .dateAdded(LocalDateTime.parse("2022-01-03T00:00:00"))
             .build();
 
-    Articles editedArticle =
-        Articles.builder()
+    Article editedArticle =
+        Article.builder()
             .url("https://moderndogmagazine.com/articles/breeds2/the-golden-retriever/")
             .title("Golden Retriever Overview_EDITED")
+            .explanation("An edited overview of the Golden Retriever breed.")
             .email("prishabobde@gmail.com")
             .dateAdded(ldt2)
             .build();
 
     String requestBody = mapper.writeValueAsString(editedArticle);
 
-    when(articlesRepository.findById(eq(67L))).thenReturn(Optional.of(article1));
+    when(articleRepository.findById(eq(67L))).thenReturn(Optional.of(article1));
 
     // act
     MvcResult response =
@@ -249,8 +256,8 @@ public class ArticlesControllerTests extends ControllerTestCase {
             .andReturn();
 
     // assert
-    verify(articlesRepository, times(1)).findById(67L);
-    verify(articlesRepository, times(1)).save(editedArticle);
+    verify(articleRepository, times(1)).findById(67L);
+    verify(articleRepository, times(1)).save(editedArticle);
     String responseString = response.getResponse().getContentAsString();
     assertEquals(requestBody, responseString);
   }
@@ -262,8 +269,8 @@ public class ArticlesControllerTests extends ControllerTestCase {
 
     LocalDateTime ldt1 = LocalDateTime.parse("2022-01-03T00:00:00");
 
-    Articles article1 =
-        Articles.builder()
+    Article article1 =
+        Article.builder()
             .url("https://moderndogmagazine.com/articles/breeds/the-golden-retriever/")
             .title("Golden Retriever Overview")
             .email("prishabobde@ucsb.edu")
@@ -272,7 +279,7 @@ public class ArticlesControllerTests extends ControllerTestCase {
 
     String requestBody = mapper.writeValueAsString(article1);
 
-    when(articlesRepository.findById(eq(67L))).thenReturn(Optional.empty());
+    when(articleRepository.findById(eq(67L))).thenReturn(Optional.empty());
 
     // act
     MvcResult response =
@@ -288,8 +295,8 @@ public class ArticlesControllerTests extends ControllerTestCase {
             .andReturn();
 
     // assert
-    verify(articlesRepository, times(1)).findById(67L);
+    verify(articleRepository, times(1)).findById(67L);
     Map<String, Object> json = responseToJson(response);
-    assertEquals("Articles with id 67 not found", json.get("message"));
+    assertEquals("Article with id 67 not found", json.get("message"));
   }
 }
