@@ -55,22 +55,21 @@ public class MenuItemReviewController extends ApiController {
       @Parameter(name = "itemId") @RequestParam long itemId,
       @Parameter(name = "reviewerEmail") @RequestParam String reviewerEmail,
       @Parameter(name = "stars") @RequestParam int stars,
-      @Parameter(name = "dateReviewed") @RequestParam LocalDateTime dateReviewed,
       @Parameter(name = "comments") @RequestParam String comments,
       // do i need this?
       @Parameter(
-              name = "menuItemReviewTime",
+              name = "dateReviewed",
               description =
                   "date (in iso format, e.g. YYYY-mm-ddTHH:MM:SSZ; see https://en.wikipedia.org/wiki/ISO_8601)")
-          @RequestParam("menuItemReviewTime")
+          @RequestParam("dateReviewed")
           @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-          LocalDateTime menuItemReviewTime)
+          LocalDateTime dateReviewed)
       throws JsonProcessingException {
 
     // For an explanation of @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     // See: https://www.baeldung.com/spring-date-parameters
 
-    log.info("menuItemReviewTime={}", menuItemReviewTime);
+    log.info("dateReviewed={}", dateReviewed);
 
     MenuItemReview menuItemReview = new MenuItemReview();
     menuItemReview.setComments(comments);
