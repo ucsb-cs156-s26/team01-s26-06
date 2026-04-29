@@ -24,8 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Slf4j
 public class UCSBOrganizationController extends ApiController {
-  @Autowired
-  UCSBOrganizationRepository ucsbOrganizationRepository;
+  @Autowired UCSBOrganizationRepository ucsbOrganizationRepository;
 
   @Operation(summary = "List all ucsb organizations")
   @PreAuthorize("hasRole('ROLE_USER')")
@@ -59,9 +58,10 @@ public class UCSBOrganizationController extends ApiController {
   @PreAuthorize("hasRole('ROLE_USER')")
   @GetMapping("")
   public UCSBOrganization getById(@Parameter(name = "orgCode") @RequestParam String orgCode) {
-    UCSBOrganization organization = ucsbOrganizationRepository
-        .findById(orgCode)
-        .orElseThrow(() -> new EntityNotFoundException(UCSBOrganization.class, orgCode));
+    UCSBOrganization organization =
+        ucsbOrganizationRepository
+            .findById(orgCode)
+            .orElseThrow(() -> new EntityNotFoundException(UCSBOrganization.class, orgCode));
 
     return organization;
   }
