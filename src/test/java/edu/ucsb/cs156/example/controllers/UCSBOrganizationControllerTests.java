@@ -307,7 +307,7 @@ public class UCSBOrganizationControllerTests extends ControllerTestCase {
 
         // act
         MvcResult response = mockMvc
-                .perform(delete("/api/ucsborganizations").param("orgCode", "TEST").with(csrf()))
+                .perform(delete("/api/ucsborganization").param("orgCode", "TEST").with(csrf()))
                 .andExpect(status().isOk())
                 .andReturn();
 
