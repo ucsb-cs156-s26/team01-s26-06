@@ -63,7 +63,7 @@ public class HelpRequestControllerTest extends ControllerTestCase {
 
   @WithMockUser(roles = {"USER"})
   @Test
-  public void logged_in_user_can_get_all_helpRequests() throws Exception {
+  public void logged_in_user_can_get_all_help_requests() throws Exception {
 
     // arrange
     LocalDateTime ldt1 = LocalDateTime.parse("2022-04-20T17:35");
@@ -97,7 +97,7 @@ public class HelpRequestControllerTest extends ControllerTestCase {
 
   @WithMockUser(roles = {"ADMIN", "USER"})
   @Test
-  public void an_admin_user_can_post_a_new_helpRequests() throws Exception {
+  public void an_admin_user_can_post_a_new_help_requests() throws Exception {
     // arrange
 
     LocalDateTime ldt1 = LocalDateTime.parse("2022-01-03T00:00:00");

@@ -1,11 +1,11 @@
 package edu.ucsb.cs156.example.repositories;
 
-import edu.ucsb.cs156.example.entities.HelpRequest;
+import edu.ucsb.cs156.example.entities.Article;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.stereotype.Repository;
 
-/** The HelpRequestRepository is a repository for HepRequest entities. */
+/** The ArticleRepository is a repository for Article entities. */
 @Repository
 @RepositoryRestResource(exported = false)
-public interface HelpRequestRepository extends CrudRepository<HelpRequest, Long> {}
+public interface ArticleRepository extends CrudRepository<Article, Long> {}
