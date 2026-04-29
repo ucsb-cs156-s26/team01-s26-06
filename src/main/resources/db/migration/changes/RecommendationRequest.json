@@ -54,13 +54,13 @@
                   {
                     "column": {
                       "name": "DATE_REQUESTED",
-                      "type": "TIMESTAMP WITH TIME ZONE"
+                      "type": "TIMESTAMP"
                     }
                   },
                   {
                     "column": {
                       "name": "DATE_NEEDED",
-                      "type": "TIMESTAMP WITH TIME ZONE"
+                      "type": "TIMESTAMP"
                     }
                   },
                   {
