@@ -100,10 +100,10 @@ public class UCSBOrganizationControllerTests extends ControllerTestCase {
             .inactive(false)
             .build();
 
-    ArrayList<UCSBOrganization> expectedOrganization = new ArrayList<>();
-    expectedOrganization.addAll(Arrays.asList(skydivingClub, chessClub));
+    ArrayList<UCSBOrganization> expectedOrganizations = new ArrayList<>();
+    expectedOrganizations.addAll(Arrays.asList(skydivingClub, chessClub));
 
-    when(ucsbOrganizationRepository.findAll()).thenReturn(expectedOrganization);
+    when(ucsbOrganizationRepository.findAll()).thenReturn(expectedOrganizations);
 
     // act
     MvcResult response =
@@ -112,7 +112,7 @@ public class UCSBOrganizationControllerTests extends ControllerTestCase {
     // assert
 
     verify(ucsbOrganizationRepository, times(1)).findAll();
-    String expectedJson = mapper.writeValueAsString(expectedOrganization);
+    String expectedJson = mapper.writeValueAsString(expectedOrganizations);
     String responseString = response.getResponse().getContentAsString();
     assertEquals(expectedJson, responseString);
   }

@@ -49,9 +49,9 @@ public class UCSBOrganizationController extends ApiController {
     organization.setOrgTranslation(orgTranslation);
     organization.setInactive(inactive);
 
-    UCSBOrganization savedorganization = ucsbOrganizationRepository.save(organization);
+    UCSBOrganization savedOrganization = ucsbOrganizationRepository.save(organization);
 
-    return savedorganization;
+    return savedOrganization;
   }
 
   @Operation(summary = "Get a single organization")
