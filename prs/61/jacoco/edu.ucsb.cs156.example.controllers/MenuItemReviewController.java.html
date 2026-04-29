@@ -21,8 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = &quot;MenuItemReview&quot;)
 @RequestMapping(&quot;/api/menuitemreview&quot;)
 @RestController
-<span class="nc" id="L24">@Slf4j</span>
-<span class="nc" id="L25">public class MenuItemReviewController extends ApiController {</span>
+<span class="fc" id="L24">@Slf4j</span>
+<span class="fc" id="L25">public class MenuItemReviewController extends ApiController {</span>
   @Autowired MenuItemReviewRepository menuItemReviewRepository;
 
   /**
@@ -34,8 +34,8 @@ import org.springframework.web.bind.annotation.RestController;
   @PreAuthorize(&quot;hasRole('ROLE_USER')&quot;)
   @GetMapping(&quot;/all&quot;)
   public Iterable&lt;MenuItemReview&gt; allMenuItemReviews() {
-<span class="nc" id="L37">    Iterable&lt;MenuItemReview&gt; menuItemReviews = menuItemReviewRepository.findAll();</span>
-<span class="nc" id="L38">    return menuItemReviews;</span>
+<span class="fc" id="L37">    Iterable&lt;MenuItemReview&gt; menuItemReviews = menuItemReviewRepository.findAll();</span>
+<span class="fc" id="L38">    return menuItemReviews;</span>
   }
 
   /**
@@ -55,33 +55,32 @@ import org.springframework.web.bind.annotation.RestController;
       @Parameter(name = &quot;itemId&quot;) @RequestParam long itemId,
       @Parameter(name = &quot;reviewerEmail&quot;) @RequestParam String reviewerEmail,
       @Parameter(name = &quot;stars&quot;) @RequestParam int stars,
-      @Parameter(name = &quot;dateReviewed&quot;) @RequestParam LocalDateTime dateReviewed,
       @Parameter(name = &quot;comments&quot;) @RequestParam String comments,
       // do i need this?
       @Parameter(
-              name = &quot;menuItemReviewTime&quot;,
+              name = &quot;dateReviewed&quot;,
               description =
                   &quot;date (in iso format, e.g. YYYY-mm-ddTHH:MM:SSZ; see https://en.wikipedia.org/wiki/ISO_8601)&quot;)
-          @RequestParam(&quot;menuItemReviewTime&quot;)
+          @RequestParam(&quot;dateReviewed&quot;)
           @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-          LocalDateTime menuItemReviewTime)
+          LocalDateTime dateReviewed)
       throws JsonProcessingException {
 
     // For an explanation of @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     // See: https://www.baeldung.com/spring-date-parameters
 
-<span class="nc" id="L73">    log.info(&quot;menuItemReviewTime={}&quot;, menuItemReviewTime);</span>
+<span class="fc" id="L72">    log.info(&quot;dateReviewed={}&quot;, dateReviewed);</span>
 
-<span class="nc" id="L75">    MenuItemReview menuItemReview = new MenuItemReview();</span>
-<span class="nc" id="L76">    menuItemReview.setComments(comments);</span>
-<span class="nc" id="L77">    menuItemReview.setDateReviewed(dateReviewed);</span>
-<span class="nc" id="L78">    menuItemReview.setItemId(itemId);</span>
-<span class="nc" id="L79">    menuItemReview.setReviewerEmail(reviewerEmail);</span>
-<span class="nc" id="L80">    menuItemReview.setStars(stars);</span>
+<span class="fc" id="L74">    MenuItemReview menuItemReview = new MenuItemReview();</span>
+<span class="fc" id="L75">    menuItemReview.setComments(comments);</span>
+<span class="fc" id="L76">    menuItemReview.setDateReviewed(dateReviewed);</span>
+<span class="fc" id="L77">    menuItemReview.setItemId(itemId);</span>
+<span class="fc" id="L78">    menuItemReview.setReviewerEmail(reviewerEmail);</span>
+<span class="fc" id="L79">    menuItemReview.setStars(stars);</span>
 
-<span class="nc" id="L82">    MenuItemReview savedMenuItemReview = menuItemReviewRepository.save(menuItemReview);</span>
+<span class="fc" id="L81">    MenuItemReview savedMenuItemReview = menuItemReviewRepository.save(menuItemReview);</span>
 
-<span class="nc" id="L84">    return savedMenuItemReview;</span>
+<span class="fc" id="L83">    return savedMenuItemReview;</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
