@@ -90,6 +90,7 @@ public class ArticlesControllerTests extends ControllerTestCase {
             .explanation("A brief overview of the Golden Retriever breed.")
             .email("prishabobde@ucsb.edu")
             .dateAdded(ldt1)
+            .explanation("A brief overview of the Golden Retriever breed.")
             .build();
 
     ArrayList<Article> expectedArticles = new ArrayList<>();
@@ -122,6 +123,7 @@ public class ArticlesControllerTests extends ControllerTestCase {
             .title("Golden Retriever Overview")
             .explanation("A brief overview of the Golden Retriever breed.")
             .email("prishabobde@ucsb.edu")
+            .explanation("A brief overview of the Golden Retriever breed.")
             .dateAdded(ldt1)
             .build();
 
