@@ -53,7 +53,7 @@
                   },
                   {
                   "column": {
-                    "name": "LOCAL_DATE_TIME",
+                    "name": "DATE_REVIEWED",
                      "type": "TIMESTAMP"
                   }
                 },
