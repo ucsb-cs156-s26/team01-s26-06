@@ -10,10 +10,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import edu.ucsb.cs156.example.ControllerTestCase;
-// import edu.ucsb.cs156.example.entities.UCSBDate;
-import edu.ucsb.cs156.example.entities.Articles;
-// import edu.ucsb.cs156.example.repositories.UCSBDateRepository;
-import edu.ucsb.cs156.example.repositories.ArticlesRepository;
+import edu.ucsb.cs156.example.entities.Article;
+import edu.ucsb.cs156.example.repositories.ArticleRepository;
 import edu.ucsb.cs156.example.repositories.UserRepository;
 import edu.ucsb.cs156.example.testconfig.TestConfig;
 import java.time.LocalDateTime;
@@ -25,16 +23,11 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MvcResult;
 
-// //import object mapper from icon.fasterxml.jackson.databind
-// import com.fasterxml.jackson.databind.ObjectMapper;
-// //import autowired from springframework.beans.factory.annotation.Autowired
-// import org.springframework.beans.factory.annotation.Autowired;
-
 @WebMvcTest(controllers = ArticlesController.class)
 @Import(TestConfig.class)
 public class ArticlesControllerTests extends ControllerTestCase {
 
-  @MockitoBean ArticlesRepository articlesRepository;
+  @MockitoBean ArticleRepository articleRepository;
 
   @MockitoBean UserRepository userRepository;
 
@@ -58,6 +51,7 @@ public class ArticlesControllerTests extends ControllerTestCase {
             post("/api/articles/post")
                 .param("title", "Golden Retriever Overview")
                 .param("url", "https://moderndogmagazine.com/articles/breeds/the-golden-retriever/")
+                .param("explanation", "A brief overview of the Golden Retriever breed.")
                 .param("email", "prishabobde@ucsb.edu")
                 .param("dateAdded", "2022-01-03T00:00:00")
                 .with(csrf()))
@@ -72,6 +66,7 @@ public class ArticlesControllerTests extends ControllerTestCase {
             post("/api/articles/post")
                 .param("title", "Golden Retriever Overview")
                 .param("url", "https://moderndogmagazine.com/articles/breeds/the-golden-retriever/")
+                .param("explanation", "A brief overview of the Golden Retriever breed.")
                 .param("email", "prishabobde@ucsb.edu")
                 .param("dateAdded", "2022-01-03T00:00:00")
                 .with(csrf()))
@@ -85,18 +80,19 @@ public class ArticlesControllerTests extends ControllerTestCase {
     // arrange
     LocalDateTime ldt1 = LocalDateTime.parse("2022-01-03T00:00:00");
 
-    Articles article1 =
-        Articles.builder()
+    Article article1 =
+        Article.builder()
             .url("https://moderndogmagazine.com/articles/breeds/the-golden-retriever/")
             .title("Golden Retriever Overview")
             .email("prishabobde@ucsb.edu")
             .dateAdded(ldt1)
+            .explanation("A brief overview of the Golden Retriever breed.")
             .build();
 
-    ArrayList<Articles> expectedArticles = new ArrayList<>();
+    ArrayList<Article> expectedArticles = new ArrayList<>();
     expectedArticles.add(article1);
 
-    when(articlesRepository.findAll()).thenReturn(expectedArticles);
+    when(articleRepository.findAll()).thenReturn(expectedArticles);
 
     // act
     MvcResult response =
@@ -104,7 +100,7 @@ public class ArticlesControllerTests extends ControllerTestCase {
 
     // assert
 
-    verify(articlesRepository, times(1)).findAll();
+    verify(articleRepository, times(1)).findAll();
     String expectedJson = mapper.writeValueAsString(expectedArticles);
     String responseString = response.getResponse().getContentAsString();
     assertEquals(expectedJson, responseString);
@@ -117,15 +113,16 @@ public class ArticlesControllerTests extends ControllerTestCase {
 
     LocalDateTime ldt1 = LocalDateTime.parse("2022-01-03T00:00:00");
 
-    Articles article1 =
-        Articles.builder()
+    Article article1 =
+        Article.builder()
             .url("https://moderndogmagazine.com/articles/breeds/the-golden-retriever/")
             .title("Golden Retriever Overview")
             .email("prishabobde@ucsb.edu")
+            .explanation("A brief overview of the Golden Retriever breed.")
             .dateAdded(ldt1)
             .build();
 
-    when(articlesRepository.save(eq(article1))).thenReturn(article1);
+    when(articleRepository.save(eq(article1))).thenReturn(article1);
 
     // act
     MvcResult response =
@@ -137,13 +134,14 @@ public class ArticlesControllerTests extends ControllerTestCase {
                         "url",
                         "https://moderndogmagazine.com/articles/breeds/the-golden-retriever/")
                     .param("email", "prishabobde@ucsb.edu")
+                    .param("explanation", "A brief overview of the Golden Retriever breed.")
                     .param("dateAdded", "2022-01-03T00:00:00")
                     .with(csrf()))
             .andExpect(status().isOk())
             .andReturn();
 
     // assert
-    verify(articlesRepository, times(1)).save(eq(article1));
+    verify(articleRepository, times(1)).save(eq(article1));
     String expectedJson = mapper.writeValueAsString(article1);
     String responseString = response.getResponse().getContentAsString();
     assertEquals(expectedJson, responseString);
