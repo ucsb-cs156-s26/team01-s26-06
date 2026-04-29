@@ -1,7 +1,7 @@
 package edu.ucsb.cs156.example.controllers;
 
-import edu.ucsb.cs156.example.entities.UCSBOrganizations;
-import edu.ucsb.cs156.example.repositories.UCSBOrganizationsRepository;
+import edu.ucsb.cs156.example.entities.UCSBOrganization;
+import edu.ucsb.cs156.example.repositories.UCSBOrganizationRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -19,32 +19,32 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Slf4j
 public class UCSBOrganizationController extends ApiController {
-  @Autowired UCSBOrganizationsRepository ucsbOrganizationsRepository;
+  @Autowired UCSBOrganizationRepository ucsbOrganizationRepository;
 
   @Operation(summary = "List all ucsb organizations")
   @PreAuthorize("hasRole('ROLE_USER')")
   @GetMapping("/all")
-  public Iterable<UCSBOrganizations> allOrganizations() {
-    Iterable<UCSBOrganizations> organizations = ucsbOrganizationsRepository.findAll();
+  public Iterable<UCSBOrganization> allOrganizations() {
+    Iterable<UCSBOrganization> organizations = ucsbOrganizationRepository.findAll();
     return organizations;
   }
 
   @Operation(summary = "Create a new organization")
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   @PostMapping("/post")
-  public UCSBOrganizations postOrganizations(
+  public UCSBOrganization postOrganization(
       @Parameter(name = "orgCode") @RequestParam String orgCode,
       @Parameter(name = "orgTranslationShort") @RequestParam String orgTranslationShort,
       @Parameter(name = "orgTranslation") @RequestParam String orgTranslation,
       @Parameter(name = "inactive") @RequestParam boolean inactive) {
 
-    UCSBOrganizations organizations = new UCSBOrganizations();
+    UCSBOrganization organizations = new UCSBOrganization();
     organizations.setOrgCode(orgCode);
     organizations.setOrgTranslationShort(orgTranslationShort);
     organizations.setOrgTranslation(orgTranslation);
     organizations.setInactive(inactive);
 
-    UCSBOrganizations savedOrganizations = ucsbOrganizationsRepository.save(organizations);
+    UCSBOrganization savedOrganizations = ucsbOrganizationRepository.save(organizations);
 
     return savedOrganizations;
   }

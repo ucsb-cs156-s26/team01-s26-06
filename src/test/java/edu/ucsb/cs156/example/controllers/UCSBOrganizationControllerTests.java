@@ -10,8 +10,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import edu.ucsb.cs156.example.ControllerTestCase;
-import edu.ucsb.cs156.example.entities.UCSBOrganizations;
-import edu.ucsb.cs156.example.repositories.UCSBOrganizationsRepository;
+import edu.ucsb.cs156.example.entities.UCSBOrganization;
+import edu.ucsb.cs156.example.repositories.UCSBOrganizationRepository;
 import edu.ucsb.cs156.example.repositories.UserRepository;
 import edu.ucsb.cs156.example.testconfig.TestConfig;
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ import org.springframework.test.web.servlet.MvcResult;
 @Import(TestConfig.class)
 public class UCSBOrganizationControllerTests extends ControllerTestCase {
 
-  @MockitoBean UCSBOrganizationsRepository ucsbOrganizationsRepository;
+  @MockitoBean UCSBOrganizationRepository ucsbOrganizationRepository;
 
   @MockitoBean UserRepository userRepository;
 
@@ -81,26 +81,26 @@ public class UCSBOrganizationControllerTests extends ControllerTestCase {
 
     // arrange
 
-    UCSBOrganizations skydivingClub =
-        UCSBOrganizations.builder()
+    UCSBOrganization skydivingClub =
+        UCSBOrganization.builder()
             .orgCode("SKY")
             .orgTranslationShort("SKYDIVING CLUB")
             .orgTranslation("SKYDIVING CLUB AT UCSB")
             .inactive(false)
             .build();
 
-    UCSBOrganizations chessClub =
-        UCSBOrganizations.builder()
+    UCSBOrganization chessClub =
+        UCSBOrganization.builder()
             .orgCode("CHESS")
             .orgTranslationShort("CHESS CLUB")
             .orgTranslation("CHESS CLUB AT UCSB")
             .inactive(false)
             .build();
 
-    ArrayList<UCSBOrganizations> expectedOrganizations = new ArrayList<>();
-    expectedOrganizations.addAll(Arrays.asList(skydivingClub, chessClub));
+    ArrayList<UCSBOrganization> expectedOrganization = new ArrayList<>();
+    expectedOrganization.addAll(Arrays.asList(skydivingClub, chessClub));
 
-    when(ucsbOrganizationsRepository.findAll()).thenReturn(expectedOrganizations);
+    when(ucsbOrganizationRepository.findAll()).thenReturn(expectedOrganization);
 
     // act
     MvcResult response =
@@ -108,8 +108,8 @@ public class UCSBOrganizationControllerTests extends ControllerTestCase {
 
     // assert
 
-    verify(ucsbOrganizationsRepository, times(1)).findAll();
-    String expectedJson = mapper.writeValueAsString(expectedOrganizations);
+    verify(ucsbOrganizationRepository, times(1)).findAll();
+    String expectedJson = mapper.writeValueAsString(expectedOrganization);
     String responseString = response.getResponse().getContentAsString();
     assertEquals(expectedJson, responseString);
   }
@@ -119,15 +119,15 @@ public class UCSBOrganizationControllerTests extends ControllerTestCase {
   public void an_admin_user_can_post_a_new_organizations() throws Exception {
     // arrange
 
-    UCSBOrganizations skydivingClub =
-        UCSBOrganizations.builder()
+    UCSBOrganization skydivingClub =
+        UCSBOrganization.builder()
             .orgCode("SKY")
             .orgTranslationShort("SKYDIVING CLUB")
             .orgTranslation("SKYDIVING CLUB AT UCSB")
             .inactive(true)
             .build();
 
-    when(ucsbOrganizationsRepository.save(eq(skydivingClub))).thenReturn(skydivingClub);
+    when(ucsbOrganizationRepository.save(eq(skydivingClub))).thenReturn(skydivingClub);
 
     // act
     MvcResult response =
@@ -143,7 +143,7 @@ public class UCSBOrganizationControllerTests extends ControllerTestCase {
             .andReturn();
 
     // assert
-    verify(ucsbOrganizationsRepository, times(1)).save(skydivingClub);
+    verify(ucsbOrganizationRepository, times(1)).save(skydivingClub);
     String expectedJson = mapper.writeValueAsString(skydivingClub);
     String responseString = response.getResponse().getContentAsString();
     assertEquals(expectedJson, responseString);
