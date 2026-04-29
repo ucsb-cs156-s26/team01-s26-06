@@ -73,7 +73,7 @@ public class UCSBDiningCommonsMenuItemController extends ApiController {
   }
 
   /**
-   * Delete a single menu item by id
+   * Delete a single menu item by id, ex: /api/ucsbdiningcommonsmenuitem?id=XXX
    *
    * @param id the id of the menu item
    * @return the id that was deleted (if it exists) or was not deleted (if not found)
@@ -87,6 +87,6 @@ public class UCSBDiningCommonsMenuItemController extends ApiController {
             .findById(id)
             .orElseThrow(() -> new EntityNotFoundException(UCSBDiningCommonsMenuItem.class, id));
     ucsbDiningCommonsMenuItemRepository.delete(menuItem);
-    return genericMessage("UCSBDiningCommonsMenuItem with id %s deleted".formatted(id));
+    return genericMessage("record %s deleted".formatted(id));
   }
 }
