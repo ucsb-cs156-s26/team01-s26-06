@@ -76,9 +76,10 @@ public class UCSBDiningCommonsMenuItemController extends ApiController {
    * Delete a single menu item by id, ex: /api/ucsbdiningcommonsmenuitem?id=XXX
    *
    * @param id the id of the menu item
-   * @return the id that was deleted (if it exists) or was not deleted (if not found)
+   * @return if exists "record XXX deleted" if DNE "record XXX not found"
    */
-  @Operation(summary = "Delete a single menu item")
+  @Operation(
+      summary = "Delete a single menu item by id, ex: DELETE /api/ucsbdiningcommonsmenuitem?id=XXX")
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   @DeleteMapping("")
   public Object deleteById(@Parameter(name = "id") @RequestParam Long id) {
