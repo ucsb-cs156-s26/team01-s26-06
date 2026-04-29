@@ -121,6 +121,7 @@ public class ArticlesControllerTests extends ControllerTestCase {
             .url("https://moderndogmagazine.com/articles/breeds/the-golden-retriever/")
             .title("Golden Retriever Overview")
             .email("prishabobde@ucsb.edu")
+            .explanation("A brief overview of the Golden Retriever breed.")
             .dateAdded(ldt1)
             .explanation("A brief overview of the Golden Retriever breed.")
             .build();
@@ -137,6 +138,7 @@ public class ArticlesControllerTests extends ControllerTestCase {
                         "url",
                         "https://moderndogmagazine.com/articles/breeds/the-golden-retriever/")
                     .param("email", "prishabobde@ucsb.edu")
+                    .param("explanation", "A brief overview of the Golden Retriever breed.")
                     .param("dateAdded", "2022-01-03T00:00:00")
                     .param("explanation", "A brief overview of the Golden Retriever breed.")
                     .with(csrf()))
