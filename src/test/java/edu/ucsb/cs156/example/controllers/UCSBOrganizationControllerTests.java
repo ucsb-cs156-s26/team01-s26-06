@@ -31,28 +31,28 @@ public class UCSBOrganizationControllerTests extends ControllerTestCase {
 
   @MockitoBean UserRepository userRepository;
 
-  // Authorization tests for /api/ucsborganizations/all
+  // Authorization tests for /api/ucsborganization/all
 
   @Test
   public void logged_out_users_cannot_get_all() throws Exception {
     mockMvc
-        .perform(get("/api/ucsborganizations/all"))
+        .perform(get("/api/ucsborganization/all"))
         .andExpect(status().is(403)); // logged out users can't get all
   }
 
   @WithMockUser(roles = {"USER"})
   @Test
   public void logged_in_users_can_get_all() throws Exception {
-    mockMvc.perform(get("/api/ucsborganizations/all")).andExpect(status().is(200)); // logged
+    mockMvc.perform(get("/api/ucsborganization/all")).andExpect(status().is(200)); // logged
   }
 
-  // Authorization tests for /api/ucsborganizations/post
+  // Authorization tests for /api/ucsborganization/post
 
   @Test
   public void logged_out_users_cannot_post() throws Exception {
     mockMvc
         .perform(
-            post("/api/ucsborganizations/post")
+            post("/api/ucsborganization/post")
                 .param("orgCode", "SKY")
                 .param("orgTranslationShort", "SKYDIVING CLUB")
                 .param("orgTranslation", "SKYDIVING CLUB AT UCSB")
@@ -66,7 +66,7 @@ public class UCSBOrganizationControllerTests extends ControllerTestCase {
   public void logged_in_regular_users_cannot_post() throws Exception {
     mockMvc
         .perform(
-            post("/api/ucsborganizations/post")
+            post("/api/ucsborganization/post")
                 .param("orgCode", "SKY")
                 .param("orgTranslationShort", "SKYDIVING CLUB")
                 .param("orgTranslation", "SKYDIVING CLUB AT UCSB")
@@ -97,26 +97,26 @@ public class UCSBOrganizationControllerTests extends ControllerTestCase {
             .inactive(false)
             .build();
 
-    ArrayList<UCSBOrganization> expectedOrganization = new ArrayList<>();
-    expectedOrganization.addAll(Arrays.asList(skydivingClub, chessClub));
+    ArrayList<UCSBOrganization> expectedOrganizations = new ArrayList<>();
+    expectedOrganizations.addAll(Arrays.asList(skydivingClub, chessClub));
 
-    when(ucsbOrganizationRepository.findAll()).thenReturn(expectedOrganization);
+    when(ucsbOrganizationRepository.findAll()).thenReturn(expectedOrganizations);
 
     // act
     MvcResult response =
-        mockMvc.perform(get("/api/ucsborganizations/all")).andExpect(status().isOk()).andReturn();
+        mockMvc.perform(get("/api/ucsborganization/all")).andExpect(status().isOk()).andReturn();
 
     // assert
 
     verify(ucsbOrganizationRepository, times(1)).findAll();
-    String expectedJson = mapper.writeValueAsString(expectedOrganization);
+    String expectedJson = mapper.writeValueAsString(expectedOrganizations);
     String responseString = response.getResponse().getContentAsString();
     assertEquals(expectedJson, responseString);
   }
 
   @WithMockUser(roles = {"ADMIN", "USER"})
   @Test
-  public void an_admin_user_can_post_a_new_organizations() throws Exception {
+  public void an_admin_user_can_post_a_new_organization() throws Exception {
     // arrange
 
     UCSBOrganization skydivingClub =
@@ -133,7 +133,7 @@ public class UCSBOrganizationControllerTests extends ControllerTestCase {
     MvcResult response =
         mockMvc
             .perform(
-                post("/api/ucsborganizations/post")
+                post("/api/ucsborganization/post")
                     .param("orgCode", "SKY")
                     .param("orgTranslationShort", "SKYDIVING CLUB")
                     .param("orgTranslation", "SKYDIVING CLUB AT UCSB")

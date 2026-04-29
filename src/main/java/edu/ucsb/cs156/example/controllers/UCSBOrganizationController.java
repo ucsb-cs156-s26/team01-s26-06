@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "UCSBOrganizations")
-@RequestMapping("/api/ucsborganizations")
+@Tag(name = "UCSBOrganization")
+@RequestMapping("/api/ucsborganization")
 @RestController
 @Slf4j
 public class UCSBOrganizationController extends ApiController {
@@ -38,14 +38,14 @@ public class UCSBOrganizationController extends ApiController {
       @Parameter(name = "orgTranslation") @RequestParam String orgTranslation,
       @Parameter(name = "inactive") @RequestParam boolean inactive) {
 
-    UCSBOrganization organizations = new UCSBOrganization();
-    organizations.setOrgCode(orgCode);
-    organizations.setOrgTranslationShort(orgTranslationShort);
-    organizations.setOrgTranslation(orgTranslation);
-    organizations.setInactive(inactive);
+    UCSBOrganization organization = new UCSBOrganization();
+    organization.setOrgCode(orgCode);
+    organization.setOrgTranslationShort(orgTranslationShort);
+    organization.setOrgTranslation(orgTranslation);
+    organization.setInactive(inactive);
 
-    UCSBOrganization savedOrganizations = ucsbOrganizationRepository.save(organizations);
+    UCSBOrganization savedOrganization = ucsbOrganizationRepository.save(organization);
 
-    return savedOrganizations;
+    return savedOrganization;
   }
 }
