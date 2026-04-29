@@ -1,7 +1,7 @@
 { "databaseChangeLog": [
     {
         "changeSet": {
-          "id": "UCSBOrganizations-1",
+          "id": "UCSBOrganization-1",
           "author": "roy-lee7473",
           "preConditions": [
             {
@@ -11,7 +11,7 @@
               "not": [
                 {
                   "tableExists": {
-                    "tableName": "UCSBORGANIZATIONS"
+                    "tableName": "UCSBORGANIZATION"
                   }
                 }
               ]
@@ -25,7 +25,7 @@
                     "column": {
                       "constraints": {
                         "primaryKey": true,
-                        "primaryKeyName": "UCSBORGANIZATIONS_PK"
+                        "primaryKeyName": "UCSBORGANIZATION_PK"
                       },
                       "name": "ORG_CODE",
                       "type": "VARCHAR(255)"
@@ -59,7 +59,7 @@
                     }
                   }
                 ],
-                "tableName": "UCSBORGANIZATIONS"
+                "tableName": "UCSBORGANIZATION"
               }
             }
           ]
