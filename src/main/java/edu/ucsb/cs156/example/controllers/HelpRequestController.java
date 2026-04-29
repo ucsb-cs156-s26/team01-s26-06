@@ -40,7 +40,7 @@ public class HelpRequestController extends ApiController {
   }
 
   /**
-   * Create a new date
+   * Create a new Help Request
    *
    * @param requesterEmail requester student's email
    * @param teamId identifies student's section ID
