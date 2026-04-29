@@ -90,4 +90,24 @@ public class UCSBDiningCommonsMenuItemController extends ApiController {
     ucsbDiningCommonsMenuItemRepository.delete(menuItem);
     return genericMessage("record %s deleted".formatted(id));
   }
+
+  /**
+   * Get a single record from the table by databse id
+   *
+   * @param id of the menu item record
+   * @return JSON of the database record with id XXX if exists, error message "id XXX not found" if
+   *     DNE
+   */
+  @Operation(
+      summary =
+          "Get a single record from the table by databse id, ex: GET /api/ucsbdiningcommonsmenuitem?id=XXX")
+  @PreAuthorize("hasRole('ROLE_USER')")
+  @GetMapping("")
+  public UCSBDiningCommonsMenuItem getById(@Parameter(name = "id") @RequestParam Long id) {
+    UCSBDiningCommonsMenuItem menuItem =
+        ucsbDiningCommonsMenuItemRepository
+            .findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("id %s not found".formatted(id)));
+    return menuItem;
+  }
 }
