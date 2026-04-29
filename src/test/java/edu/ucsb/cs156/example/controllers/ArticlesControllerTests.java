@@ -123,7 +123,6 @@ public class ArticlesControllerTests extends ControllerTestCase {
             .email("prishabobde@ucsb.edu")
             .explanation("A brief overview of the Golden Retriever breed.")
             .dateAdded(ldt1)
-            .explanation("A brief overview of the Golden Retriever breed.")
             .build();
 
     when(articleRepository.save(eq(article1))).thenReturn(article1);
@@ -140,7 +139,6 @@ public class ArticlesControllerTests extends ControllerTestCase {
                     .param("email", "prishabobde@ucsb.edu")
                     .param("explanation", "A brief overview of the Golden Retriever breed.")
                     .param("dateAdded", "2022-01-03T00:00:00")
-                    .param("explanation", "A brief overview of the Golden Retriever breed.")
                     .with(csrf()))
             .andExpect(status().isOk())
             .andReturn();
