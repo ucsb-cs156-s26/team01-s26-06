@@ -71,7 +71,7 @@ public class UCSBDiningCommonsMenuItemControllerTests extends ControllerTestCase
     assertEquals(expectedJson, responseString);
   }
 
-  // Authorization tests for /api/ucsbdiningcommonsmenuitem?id=XXX (getById)
+  // Authorization tests for GET /api/ucsbdiningcommonsmenuitem?id=XXX (getById)
 
   @Test
   public void logged_out_users_cannot_get_by_id() throws Exception {
