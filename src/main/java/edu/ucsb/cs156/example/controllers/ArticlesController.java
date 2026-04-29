@@ -35,9 +35,9 @@ public class ArticlesController extends ApiController {
   /**
    * List all Articles
    *
-   * @return an iterable of Commits
+   * @return an iterable of Articles
    */
-  @Operation(summary = "List all commits")
+  @Operation(summary = "List all articles")
   @PreAuthorize("hasRole('ROLE_USER')")
   @GetMapping("/all")
   public Iterable<Article> allArticles() {
