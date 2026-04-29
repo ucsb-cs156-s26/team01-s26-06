@@ -99,9 +99,7 @@ public class ArticlesController extends ApiController {
     Articles article =
         articlesRepository
             .findById(id)
-            .orElseThrow(
-                //  () -> new EntityNotFoundException("Articles with id " + id + " not found"));
-                () -> new EntityNotFoundException(Articles.class, id));
+            .orElseThrow(() -> new EntityNotFoundException(Articles.class, id));
 
     return article;
   }
