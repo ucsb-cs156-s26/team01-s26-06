@@ -98,7 +98,7 @@ public class UCSBDiningCommonsMenuItemControllerTests extends ControllerTestCase
         .andExpect(status().is(403)); // only admins can post
   }
 
-  // Authorization tests for delete with id
+  // Authorization tests for DELETE /api/ucsbdiningcommonsmenuitem?id=XXX
   @WithMockUser(roles = {"USER"})
   @Test
   public void logged_in_regular_users_cannot_delete() throws Exception {
@@ -120,7 +120,7 @@ public class UCSBDiningCommonsMenuItemControllerTests extends ControllerTestCase
     // ensure that response message is correct
     String responseBody = result.getResponse().getContentAsString();
     Map<String, Object> json = mapper.readValue(responseBody, Map.class);
-    assertEquals("UCSBDiningCommonsMenuItem with id 123 not found", json.get("message"));
+    assertEquals("record 123 not found", json.get("message"));
 
     UCSBDiningCommonsMenuItem menuItem =
         UCSBDiningCommonsMenuItem.builder()
