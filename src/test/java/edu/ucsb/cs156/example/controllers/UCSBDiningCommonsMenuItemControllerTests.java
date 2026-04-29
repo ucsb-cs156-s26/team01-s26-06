@@ -71,6 +71,50 @@ public class UCSBDiningCommonsMenuItemControllerTests extends ControllerTestCase
     assertEquals(expectedJson, responseString);
   }
 
+  // Authorization tests for /api/ucsbdiningcommonsmenuitem?id=XXX (getById)
+
+  @Test
+  public void logged_out_users_cannot_get_by_id() throws Exception {
+    mockMvc.perform(get("/api/ucsbdiningcommonsmenuitem?id=123")).andExpect(status().is(403));
+  }
+
+  @WithMockUser(roles = {"USER"})
+  @Test
+  public void logged_in_users_can_get_by_id_with_empty_database() throws Exception {
+    // test with no data, expect 404
+    MvcResult result =
+        mockMvc
+            .perform(get("/api/ucsbdiningcommonsmenuitem?id=123"))
+            .andExpect(status().is(404))
+            .andReturn();
+    String responseBody = result.getResponse().getContentAsString();
+    Map<String, Object> json = mapper.readValue(responseBody, Map.class);
+    assertEquals("id 123 not found", json.get("message"));
+  }
+
+  @WithMockUser(roles = {"USER"})
+  @Test
+  public void logged_in_users_can_get_by_id_with_real_data() throws Exception {
+    // test with sample values
+    UCSBDiningCommonsMenuItem menuItem =
+        UCSBDiningCommonsMenuItem.builder()
+            .diningCommonsCode("ortega")
+            .name("chicken")
+            .station("entree")
+            .build();
+    when(ucsbDiningCommonsMenuItemRepository.findById(0L)).thenReturn(Optional.of(menuItem));
+
+    MvcResult response =
+        mockMvc
+            .perform(get("/api/ucsbdiningcommonsmenuitem?id=0"))
+            .andExpect(status().isOk())
+            .andReturn();
+    verify(ucsbDiningCommonsMenuItemRepository, times(1)).findById(0L);
+    String expectedJson = mapper.writeValueAsString(menuItem);
+    String responseString = response.getResponse().getContentAsString();
+    assertEquals(expectedJson, responseString);
+  }
+
   // Authorization tests for /api/ucsbdiningcommonsmenuitem/post
 
   @Test
