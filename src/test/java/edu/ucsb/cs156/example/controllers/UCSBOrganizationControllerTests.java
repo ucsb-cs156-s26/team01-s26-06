@@ -215,39 +215,38 @@ public class UCSBOrganizationControllerTests extends ControllerTestCase {
     assertEquals("UCSBOrganization with id NONE not found", json.get("message"));
   }
 
-  // Authorization tests for /api/ucsborganizations/put
+  // Authorization tests for /api/ucsborganization/put
 
   @WithMockUser(roles = {"ADMIN", "USER"})
   @Test
-  public void admin_can_edit_an_existing_commons() throws Exception {
+  public void admin_can_edit_an_existing_organization() throws Exception {
     // arrange
 
-    UCSBOrganizations organizationsOrig =
-        UCSBOrganizations.builder()
+    UCSBOrganization organizationOrig =
+        UCSBOrganization.builder()
             .orgCode("SKY")
             .orgTranslationShort("SKYDIVING CLUB")
             .orgTranslation("SKYDIVING CLUB AT UCSB")
             .inactive(false)
             .build();
 
-    UCSBOrganizations organizationsEdited =
-        UCSBOrganizations.builder()
+    UCSBOrganization organizationEdited =
+        UCSBOrganization.builder()
             .orgCode("SKY")
             .orgTranslationShort("SKYDIVING CLUB EDITED")
             .orgTranslation("SKYDIVING CLUB AT UCSB EDITED")
             .inactive(true)
             .build();
 
-    String requestBody = mapper.writeValueAsString(organizationsEdited);
+    String requestBody = mapper.writeValueAsString(organizationEdited);
 
-    when(ucsbOrganizationsRepository.findById(eq("SKY")))
-        .thenReturn(Optional.of(organizationsOrig));
+    when(ucsbOrganizationRepository.findById(eq("SKY"))).thenReturn(Optional.of(organizationOrig));
 
     // act
     MvcResult response =
         mockMvc
             .perform(
-                put("/api/ucsborganizations")
+                put("/api/ucsborganization")
                     .param("orgCode", "SKY")
                     .contentType(MediaType.APPLICATION_JSON)
                     .characterEncoding("utf-8")
@@ -257,35 +256,35 @@ public class UCSBOrganizationControllerTests extends ControllerTestCase {
             .andReturn();
 
     // assert
-    verify(ucsbOrganizationsRepository, times(1)).findById("SKY");
-    verify(ucsbOrganizationsRepository, times(1))
-        .save(organizationsEdited); // should be saved with updated info
+    verify(ucsbOrganizationRepository, times(1)).findById("SKY");
+    verify(ucsbOrganizationRepository, times(1))
+        .save(organizationEdited); // should be saved with updated info
     String responseString = response.getResponse().getContentAsString();
     assertEquals(requestBody, responseString);
   }
 
   @WithMockUser(roles = {"ADMIN", "USER"})
   @Test
-  public void admin_cannot_edit_commons_that_does_not_exist() throws Exception {
+  public void admin_cannot_edit_organization_that_does_not_exist() throws Exception {
     // arrange
 
-    UCSBOrganizations editedOrganizations =
-        UCSBOrganizations.builder()
+    UCSBOrganization organizationEdited =
+        UCSBOrganization.builder()
             .orgCode("WEIRD")
             .orgTranslationShort("WEIRD CLUB")
             .orgTranslation("WEIRD CLUCB AT UCSB")
             .inactive(true)
             .build();
 
-    String requestBody = mapper.writeValueAsString(editedOrganizations);
+    String requestBody = mapper.writeValueAsString(organizationEdited);
 
-    when(ucsbOrganizationsRepository.findById(eq("WEIRD"))).thenReturn(Optional.empty());
+    when(ucsbOrganizationRepository.findById(eq("WEIRD"))).thenReturn(Optional.empty());
 
     // act
     MvcResult response =
         mockMvc
             .perform(
-                put("/api/ucsborganizations")
+                put("/api/ucsborganization")
                     .param("orgCode", "WEIRD")
                     .contentType(MediaType.APPLICATION_JSON)
                     .characterEncoding("utf-8")
@@ -295,8 +294,8 @@ public class UCSBOrganizationControllerTests extends ControllerTestCase {
             .andReturn();
 
     // assert
-    verify(ucsbOrganizationsRepository, times(1)).findById("WEIRD");
+    verify(ucsbOrganizationRepository, times(1)).findById("WEIRD");
     Map<String, Object> json = responseToJson(response);
-    assertEquals("UCSBOrganizations with id WEIRD not found", json.get("message"));
+    assertEquals("UCSBOrganization with id WEIRD not found", json.get("message"));
   }
 }
