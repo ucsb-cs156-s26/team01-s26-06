@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = &quot;UCSBOrganizations&quot;)
-@RequestMapping(&quot;/api/ucsborganizations&quot;)
+@Tag(name = &quot;UCSBOrganization&quot;)
+@RequestMapping(&quot;/api/ucsborganization&quot;)
 @RestController
 <span class="fc" id="L20">@Slf4j</span>
 <span class="fc" id="L21">public class UCSBOrganizationController extends ApiController {</span>
@@ -38,15 +38,15 @@ import org.springframework.web.bind.annotation.RestController;
       @Parameter(name = &quot;orgTranslation&quot;) @RequestParam String orgTranslation,
       @Parameter(name = &quot;inactive&quot;) @RequestParam boolean inactive) {
 
-<span class="fc" id="L41">    UCSBOrganization organizations = new UCSBOrganization();</span>
-<span class="fc" id="L42">    organizations.setOrgCode(orgCode);</span>
-<span class="fc" id="L43">    organizations.setOrgTranslationShort(orgTranslationShort);</span>
-<span class="fc" id="L44">    organizations.setOrgTranslation(orgTranslation);</span>
-<span class="fc" id="L45">    organizations.setInactive(inactive);</span>
+<span class="fc" id="L41">    UCSBOrganization organization = new UCSBOrganization();</span>
+<span class="fc" id="L42">    organization.setOrgCode(orgCode);</span>
+<span class="fc" id="L43">    organization.setOrgTranslationShort(orgTranslationShort);</span>
+<span class="fc" id="L44">    organization.setOrgTranslation(orgTranslation);</span>
+<span class="fc" id="L45">    organization.setInactive(inactive);</span>
 
-<span class="fc" id="L47">    UCSBOrganization savedOrganizations = ucsbOrganizationRepository.save(organizations);</span>
+<span class="fc" id="L47">    UCSBOrganization savedOrganization = ucsbOrganizationRepository.save(organization);</span>
 
-<span class="fc" id="L49">    return savedOrganizations;</span>
+<span class="fc" id="L49">    return savedOrganization;</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
