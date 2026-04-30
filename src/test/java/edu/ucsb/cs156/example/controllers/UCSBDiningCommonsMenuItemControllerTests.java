@@ -14,8 +14,7 @@ import edu.ucsb.cs156.example.entities.UCSBDiningCommonsMenuItem;
 import edu.ucsb.cs156.example.repositories.UCSBDiningCommonsMenuItemRepository;
 import edu.ucsb.cs156.example.repositories.UserRepository;
 import edu.ucsb.cs156.example.testconfig.TestConfig;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
@@ -56,7 +55,8 @@ public class UCSBDiningCommonsMenuItemControllerTests extends ControllerTestCase
             .name("chicken")
             .station("entree")
             .build();
-    ArrayList<UCSBDiningCommonsMenuItem> menuItems = new ArrayList<>(Arrays.asList(menuItem));
+    ArrayList<UCSBDiningCommonsMenuItem> menuItems =
+        new ArrayList<>(Collections.singletonList(menuItem));
     when(ucsbDiningCommonsMenuItemRepository.findAll()).thenReturn(menuItems);
 
     // ensure that the return is correct
@@ -96,6 +96,49 @@ public class UCSBDiningCommonsMenuItemControllerTests extends ControllerTestCase
                 .param("station", "entree")
                 .with(csrf()))
         .andExpect(status().is(403)); // only admins can post
+  }
+
+  // Authorization tests for DELETE /api/ucsbdiningcommonsmenuitem?id=XXX
+  @WithMockUser(roles = {"USER"})
+  @Test
+  public void logged_in_regular_users_cannot_delete() throws Exception {
+    mockMvc
+        .perform(delete("/api/ucsbdiningcommonsmenuitem?id=123").param("id", "123").with(csrf()))
+        // regular users cannot delete
+        .andExpect(status().is(403));
+  }
+
+  @WithMockUser(roles = {"ADMIN"})
+  @Test
+  public void logged_in_admin_can_delete() throws Exception {
+    // test with no data, expect 404
+    MvcResult result =
+        mockMvc
+            .perform(delete("/api/ucsbdiningcommonsmenuitem?id=123").with(csrf()))
+            .andExpect(status().is(404))
+            .andReturn();
+    // ensure that response message is correct
+    String responseBody = result.getResponse().getContentAsString();
+    Map<String, Object> json = mapper.readValue(responseBody, Map.class);
+    assertEquals("record 123 not found", json.get("message"));
+
+    UCSBDiningCommonsMenuItem menuItem =
+        UCSBDiningCommonsMenuItem.builder()
+            .diningCommonsCode("ortega")
+            .name("chicken")
+            .station("entree")
+            .build();
+    when(ucsbDiningCommonsMenuItemRepository.findById(0L)).thenReturn(Optional.of(menuItem));
+    result =
+        mockMvc
+            .perform(delete("/api/ucsbdiningcommonsmenuitem?id=0").with(csrf()))
+            .andExpect(status().isOk())
+            .andReturn();
+    // ensure that response message is correct
+    responseBody = result.getResponse().getContentAsString();
+    json = mapper.readValue(responseBody, Map.class);
+    assertEquals("record 0 deleted", json.get("message"));
+    verify(ucsbDiningCommonsMenuItemRepository, times(1)).delete(menuItem);
   }
 
   // Test that admins can create a new menu item
