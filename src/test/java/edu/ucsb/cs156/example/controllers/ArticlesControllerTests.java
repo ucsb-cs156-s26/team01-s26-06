@@ -123,7 +123,6 @@ public class ArticlesControllerTests extends ControllerTestCase {
             .title("Golden Retriever Overview")
             .explanation("A brief overview of the Golden Retriever breed.")
             .email("prishabobde@ucsb.edu")
-            .explanation("A brief overview of the Golden Retriever breed.")
             .dateAdded(ldt1)
             .build();
 
@@ -227,6 +226,7 @@ public class ArticlesControllerTests extends ControllerTestCase {
         Article.builder()
             .url("https://moderndogmagazine.com/articles/breeds/the-golden-retriever/")
             .title("Golden Retriever Overview")
+            .explanation("An overview of the Golden Retriever breed.")
             .email("prishabobde@ucsb.edu")
             .dateAdded(LocalDateTime.parse("2022-01-03T00:00:00"))
             .build();
@@ -275,6 +275,7 @@ public class ArticlesControllerTests extends ControllerTestCase {
         Article.builder()
             .url("https://moderndogmagazine.com/articles/breeds/the-golden-retriever/")
             .title("Golden Retriever Overview")
+            .explanation("An edited overview of the Golden Retriever breed.")
             .email("prishabobde@ucsb.edu")
             .dateAdded(ldt1)
             .build();
