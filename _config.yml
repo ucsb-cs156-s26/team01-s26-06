@@ -23,4 +23,4 @@ repo_name: "TBD"
 repo: ucsb-cs156-s26/team01-s26-06
 owner: ucsb-cs156-s26
 repo_name: team01-s26-06
-pull_requests: [{"author":{"id":"U_kgDOCVG5mA","is_bot":false,"login":"dongyi-xia","name":""},"headRefName":"dx-create-RecommendationRequest-controller","number":64,"title":"dx - create recommendation request controller, add GET/ all and POST ","url":"https://github.com/ucsb-cs156-s26/team01-s26-06/pull/64"},{"author":{"id":"U_kgDOCu9WdA","is_bot":false,"login":"Chaehana","name":""},"headRefName":"cb-put-for-helprequest-table","number":50,"title":"Cb put for helprequest table","url":"https://github.com/ucsb-cs156-s26/team01-s26-06/pull/50"}]
+pull_requests: [{"author":{"id":"U_kgDOCVG5mA","is_bot":false,"login":"dongyi-xia","name":""},"headRefName":"dx-create-RecommendationRequest-controller","number":64,"title":"dx - create recommendation request controller, add GET/ all and POST ","url":"https://github.com/ucsb-cs156-s26/team01-s26-06/pull/64"}]
