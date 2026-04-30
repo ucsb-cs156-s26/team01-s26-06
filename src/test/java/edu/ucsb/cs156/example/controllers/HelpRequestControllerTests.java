@@ -28,7 +28,7 @@ import org.springframework.test.web.servlet.MvcResult;
 
 @WebMvcTest(controllers = HelpRequestController.class)
 @Import(TestConfig.class)
-public class HelpRequestControllerTest extends ControllerTestCase {
+public class HelpRequestControllerTests extends ControllerTestCase {
   @MockitoBean HelpRequestRepository helpRequestRepository;
 
   @MockitoBean UserRepository userRepository;
@@ -50,14 +50,32 @@ public class HelpRequestControllerTest extends ControllerTestCase {
   // Testing for /post method
   @Test
   public void logged_out_users_cannot_post() throws Exception {
-    mockMvc.perform(post("/api/helprequests/post")).andExpect(status().is(403));
+    mockMvc
+        .perform(
+            post("/api/helprequests/post")
+                .param("requesterEmail", "cgaucho@ucsb.edu")
+                .param("teamId", "s22-5pm-3")
+                .param("tableOrBreakoutRoom", "7")
+                .param("requestTime", "2022-01-03T00:00:00")
+                .param("explanation", "Need help with Swagger-ui")
+                .param("solved", "true")
+                .with(csrf()))
+        .andExpect(status().is(403));
   }
 
   @WithMockUser(roles = {"USER"})
   @Test
   public void logged_in_regular_users_cannot_post() throws Exception {
     mockMvc
-        .perform(post("/api/helprequests/post"))
+        .perform(
+            post("/api/helprequests/post")
+                .param("requesterEmail", "cgaucho@ucsb.edu")
+                .param("teamId", "s22-5pm-3")
+                .param("tableOrBreakoutRoom", "7")
+                .param("requestTime", "2022-01-03T00:00:00")
+                .param("explanation", "Need help with Swagger-ui")
+                .param("solved", "true")
+                .with(csrf()))
         .andExpect(status().is(403)); // only admins can post
   }
 
