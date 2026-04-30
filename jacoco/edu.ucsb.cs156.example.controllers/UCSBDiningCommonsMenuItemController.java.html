@@ -2,6 +2,7 @@
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import edu.ucsb.cs156.example.entities.UCSBDiningCommonsMenuItem;
+import edu.ucsb.cs156.example.errors.EntityNotFoundException;
 import edu.ucsb.cs156.example.repositories.UCSBDiningCommonsMenuItemRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -15,8 +16,8 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = &quot;UCSBDiningCommonsMenuItem&quot;)
 @RequestMapping(&quot;/api/ucsbdiningcommonsmenuitem&quot;)
 @RestController
-<span class="fc" id="L18">@Slf4j</span>
-<span class="fc" id="L19">public class UCSBDiningCommonsMenuItemController extends ApiController {</span>
+<span class="fc" id="L19">@Slf4j</span>
+<span class="fc" id="L20">public class UCSBDiningCommonsMenuItemController extends ApiController {</span>
   @Autowired UCSBDiningCommonsMenuItemRepository ucsbDiningCommonsMenuItemRepository;
 
   /**
@@ -28,8 +29,8 @@ import org.springframework.web.bind.annotation.*;
   @PreAuthorize(&quot;hasRole('ROLE_USER')&quot;)
   @GetMapping(&quot;/all&quot;)
   public Iterable&lt;UCSBDiningCommonsMenuItem&gt; allUCSBDiningCommonsMenuItems() {
-<span class="fc" id="L31">    Iterable&lt;UCSBDiningCommonsMenuItem&gt; menuItems = ucsbDiningCommonsMenuItemRepository.findAll();</span>
-<span class="fc" id="L32">    return menuItems;</span>
+<span class="fc" id="L32">    Iterable&lt;UCSBDiningCommonsMenuItem&gt; menuItems = ucsbDiningCommonsMenuItemRepository.findAll();</span>
+<span class="fc" id="L33">    return menuItems;</span>
   }
 
   /**
@@ -61,14 +62,33 @@ import org.springframework.web.bind.annotation.*;
     // if any of the parameters are empty or null, ??
 
     UCSBDiningCommonsMenuItem menuItem =
-<span class="fc" id="L64">        UCSBDiningCommonsMenuItem.builder()</span>
-<span class="fc" id="L65">            .diningCommonsCode(diningCommonsCode)</span>
-<span class="fc" id="L66">            .name(name)</span>
-<span class="fc" id="L67">            .station(station)</span>
-<span class="fc" id="L68">            .build();</span>
-<span class="fc" id="L69">    UCSBDiningCommonsMenuItem savedMenuItem = ucsbDiningCommonsMenuItemRepository.save(menuItem);</span>
+<span class="fc" id="L65">        UCSBDiningCommonsMenuItem.builder()</span>
+<span class="fc" id="L66">            .diningCommonsCode(diningCommonsCode)</span>
+<span class="fc" id="L67">            .name(name)</span>
+<span class="fc" id="L68">            .station(station)</span>
+<span class="fc" id="L69">            .build();</span>
+<span class="fc" id="L70">    UCSBDiningCommonsMenuItem savedMenuItem = ucsbDiningCommonsMenuItemRepository.save(menuItem);</span>
 
-<span class="fc" id="L71">    return savedMenuItem;</span>
+<span class="fc" id="L72">    return savedMenuItem;</span>
+  }
+
+  /**
+   * Delete a single menu item by id, ex: /api/ucsbdiningcommonsmenuitem?id=XXX
+   *
+   * @param id the id of the menu item
+   * @return if exists &quot;record XXX deleted&quot; if DNE &quot;record XXX not found&quot;
+   */
+  @Operation(
+      summary = &quot;Delete a single menu item by id, ex: DELETE /api/ucsbdiningcommonsmenuitem?id=XXX&quot;)
+  @PreAuthorize(&quot;hasRole('ROLE_ADMIN')&quot;)
+  @DeleteMapping(&quot;&quot;)
+  public Object deleteById(@Parameter(name = &quot;id&quot;) @RequestParam Long id) {
+<span class="fc" id="L86">    UCSBDiningCommonsMenuItem menuItem =</span>
+        ucsbDiningCommonsMenuItemRepository
+<span class="fc" id="L88">            .findById(id)</span>
+<span class="fc" id="L89">            .orElseThrow(() -&gt; new EntityNotFoundException(&quot;record %s not found&quot;.formatted(id)));</span>
+<span class="fc" id="L90">    ucsbDiningCommonsMenuItemRepository.delete(menuItem);</span>
+<span class="fc" id="L91">    return genericMessage(&quot;record %s deleted&quot;.formatted(id));</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
