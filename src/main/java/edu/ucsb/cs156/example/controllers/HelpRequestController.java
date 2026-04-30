@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -136,5 +137,24 @@ public class HelpRequestController extends ApiController {
     helpRequestRepository.save(helpRequest);
 
     return helpRequest;
+  }
+
+  /**
+   * Delete a Help Request
+   *
+   * @param id the id of the help request to delete
+   * @return a message indicating the help request was deleted
+   */
+  @Operation(summary = "Delete a Help Request")
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
+  @DeleteMapping("")
+  public Object deleteHelpRequest(@Parameter(name = "id") @RequestParam Long id) {
+    HelpRequest helpRequest =
+        helpRequestRepository
+            .findById(id)
+            .orElseThrow(() -> new EntityNotFoundException(HelpRequest.class, id));
+
+    helpRequestRepository.delete(helpRequest);
+    return genericMessage("Help Request with id %s deleted".formatted(id));
   }
 }
