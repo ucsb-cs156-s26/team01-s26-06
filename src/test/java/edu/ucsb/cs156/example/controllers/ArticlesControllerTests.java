@@ -226,8 +226,8 @@ public class ArticlesControllerTests extends ControllerTestCase {
         Article.builder()
             .url("https://moderndogmagazine.com/articles/breeds/the-golden-retriever/")
             .title("Golden Retriever Overview")
-            .explanation("An overview of the Golden Retriever breed.")
             .email("prishabobde@ucsb.edu")
+            .explanation("A brief overview of the Golden Retriever breed.")
             .dateAdded(LocalDateTime.parse("2022-01-03T00:00:00"))
             .build();
 
@@ -235,8 +235,8 @@ public class ArticlesControllerTests extends ControllerTestCase {
         Article.builder()
             .url("https://moderndogmagazine.com/articles/breeds2/the-golden-retriever/")
             .title("Golden Retriever Overview_EDITED")
-            .explanation("An edited overview of the Golden Retriever breed.")
             .email("prishabobde@gmail.com")
+            .explanation("An edited overview of the Golden Retriever breed.")
             .dateAdded(ldt2)
             .build();
 
@@ -275,8 +275,8 @@ public class ArticlesControllerTests extends ControllerTestCase {
         Article.builder()
             .url("https://moderndogmagazine.com/articles/breeds/the-golden-retriever/")
             .title("Golden Retriever Overview")
-            .explanation("An edited overview of the Golden Retriever breed.")
             .email("prishabobde@ucsb.edu")
+            .explanation("A brief overview of the Golden Retriever breed.")
             .dateAdded(ldt1)
             .build();
 
@@ -301,5 +301,59 @@ public class ArticlesControllerTests extends ControllerTestCase {
     verify(articleRepository, times(1)).findById(67L);
     Map<String, Object> json = responseToJson(response);
     assertEquals("Article with id 67 not found", json.get("message"));
+  }
+
+  @WithMockUser(roles = {"ADMIN", "USER"})
+  @Test
+  public void admin_can_delete_a_article() throws Exception {
+    // arrange
+
+    LocalDateTime ldt1 = LocalDateTime.parse("2022-01-03T00:00:00");
+
+    Article article1 =
+        Article.builder()
+            .url("https://moderndogmagazine.com/articles/breeds/the-golden-retriever/")
+            .title("Golden Retriever Overview")
+            .email("prishabobde@ucsb.edu")
+            .explanation("A brief overview of the Golden Retriever breed.")
+            .dateAdded(ldt1)
+            .build();
+
+    when(articleRepository.findById(eq(15L))).thenReturn(Optional.of(article1));
+
+    // act
+    MvcResult response =
+        mockMvc
+            .perform(delete("/api/articles").param("id", "15").with(csrf()))
+            .andExpect(status().isOk())
+            .andReturn();
+
+    // assert
+    verify(articleRepository, times(1)).findById(15L);
+    verify(articleRepository, times(1)).delete(eq(article1));
+
+    Map<String, Object> json = responseToJson(response);
+    assertEquals("Article with id 15 deleted", json.get("message"));
+  }
+
+  @WithMockUser(roles = {"ADMIN", "USER"})
+  @Test
+  public void admin_tries_to_delete_non_existant_article_and_gets_right_error_message()
+      throws Exception {
+    // arrange
+
+    when(articleRepository.findById(eq(15L))).thenReturn(Optional.empty());
+
+    // act
+    MvcResult response =
+        mockMvc
+            .perform(delete("/api/articles").param("id", "15").with(csrf()))
+            .andExpect(status().isNotFound())
+            .andReturn();
+
+    // assert
+    verify(articleRepository, times(1)).findById(15L);
+    Map<String, Object> json = responseToJson(response);
+    assertEquals("Article with id 15 not found", json.get("message"));
   }
 }
