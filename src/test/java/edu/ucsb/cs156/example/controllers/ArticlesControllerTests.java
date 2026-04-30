@@ -87,6 +87,7 @@ public class ArticlesControllerTests extends ControllerTestCase {
         Article.builder()
             .url("https://moderndogmagazine.com/articles/breeds/the-golden-retriever/")
             .title("Golden Retriever Overview")
+            .explanation("A brief overview of the Golden Retriever breed.")
             .email("prishabobde@ucsb.edu")
             .dateAdded(ldt1)
             .explanation("A brief overview of the Golden Retriever breed.")

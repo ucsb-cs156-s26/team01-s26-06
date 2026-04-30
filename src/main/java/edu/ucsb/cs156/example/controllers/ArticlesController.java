@@ -82,8 +82,8 @@ public class ArticlesController extends ApiController {
     article.setTitle(title);
     article.setUrl(url);
     article.setEmail(email);
-    article.setDateAdded(dateAdded);
     article.setExplanation(explanation);
+    article.setDateAdded(dateAdded);
 
     Article savedArticle = articleRepository.save(article);
 
